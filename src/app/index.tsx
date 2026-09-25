@@ -26,13 +26,13 @@ export default function Index() {
   const Item = ({title, password}: ItemProps) => (
     <View style={styles.item}>
       <TouchableOpacity>
-        <Ionicons name='create' size={24} color={'333'} />
+        <Ionicons name='create' size={24} color={'#222222'} />
       </TouchableOpacity>
 
       <Text style={styles.itemText}>{title}</Text>
       
       <TouchableOpacity>
-        <Ionicons name='trash' size={24} color={'333'} />
+        <Ionicons name='trash' size={24} color={'#222222'} />
       </TouchableOpacity>
     </View>
   );
@@ -40,7 +40,7 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.searchBar}>
-        <Ionicons name='search' size={24} color={'333'} />
+        <Ionicons name='search' size={24} color={'#222222'} />
         <TextInput placeholder='search' placeholderTextColor="rgba(172, 172, 172, .30)" style={styles.searchBarInput} clearButtonMode='always'/>
       </View>
 
@@ -49,6 +49,15 @@ export default function Index() {
         renderItem={({item}) => <Item title={item.title} password={item.password} />}
         keyExtractor={item => item.id.toString()}
       />
+
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.newItemButton}>
+          <Text style={styles.newItemButtonText}>Create new password</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Ionicons name='cog' size={50} color={'#222222'} />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -57,10 +66,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    backgroundColor: '#FFF',
+    backgroundColor: '#f0ece4',
   },
   searchBar: {
-    gap: 10,
+    gap: 15,
     marginTop: 10,
     marginBottom: 10,
     flexDirection: 'row',
@@ -73,13 +82,13 @@ const styles = StyleSheet.create({
   searchBarInput: {
     flex: 1,
     fontSize: 16,
-    color: '#000000'
+    color: '#222222'
   },
   item: {
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    backgroundColor: '#64C674',
+    backgroundColor: '#C2D8C4',
     borderRadius: 20,
     padding: 16,
     marginBottom: 10,
@@ -87,5 +96,26 @@ const styles = StyleSheet.create({
   itemText: {
     fontWeight: 'bold',
     fontSize: 16,
-  }
+    color: '#222222'
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginRight: 15,
+    marginLeft: 20,
+  },
+  newItemButton: {
+    flex: 1,
+    backgroundColor: '#C2D8C4',
+    padding: 20,
+    borderRadius: 20,
+    marginRight: 20,
+    alignItems: 'center',
+  },
+  newItemButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#222222'
+  },
 });
