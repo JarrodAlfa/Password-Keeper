@@ -1,41 +1,59 @@
 import { Ionicons } from "@react-native-vector-icons/ionicons";
+import { useState } from "react";
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const data = [
+  {
+    id: '1',
+    title: 'email',
+    password: 'password123!',
+  },
+  {
+    id: '2',
+    title: 'work email',
+    password: 'password123!',
+  },
+  {
+    id: '3',
+    title: 'work phone',
+    password: 'password123!',
+  },
+];
+
+type ItemType = {
+  id: string;
+  title: string;
+  password: string;
+}
+
 export default function Index() {
-  const DATA = [
-      {
-        id: 1,
-        title: 'email',
-        password: 'password123!',
-      },
-      {
-        id: 2,
-        title: 'work email',
-        password: 'password123!',
-      },
-      {
-        id: 3,
-        title: 'work phone',
-        password: 'password123!',
-      },
-    ]
-    
-  type ItemProps = {title: string; password: string};
+  const [textToShow, setTextToShow] = useState<string | null>(null);
+  const toggleTTS = (id: string) => {
+    setTextToShow(prevTTS => (prevTTS === id ? null : id));
+  };
 
-  const Item = ({title, password}: ItemProps) => (
-    <View style={styles.item}>
-      <TouchableOpacity>
-        <Ionicons name='create' size={24} color={'#222222'} />
-      </TouchableOpacity>
+  const Item = ({ item }: { item: ItemType }) => {
+    const isShown = textToShow === item.id;
 
-      <Text style={styles.itemText}>{title}</Text>
-      
-      <TouchableOpacity>
-        <Ionicons name='trash' size={24} color={'#222222'} />
-      </TouchableOpacity>
-    </View>
-  );
+    return (
+    <TouchableOpacity onPress={
+      () => toggleTTS(item.id)
+    }>
+      <View style={styles.item}>
+        <TouchableOpacity>
+          <Ionicons name='create' size={24} color={'#222222'} />
+        </TouchableOpacity>
+
+        <Text style={styles.itemText}>{isShown ? item.password : item.title}</Text>
+        
+        <TouchableOpacity>
+          <Ionicons name='trash' size={24} color={'#222222'} />
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,9 +63,10 @@ export default function Index() {
       </View>
 
       <FlatList
-        data={DATA}
-        renderItem={({item}) => <Item title={item.title} password={item.password} />}
-        keyExtractor={item => item.id.toString()}
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={Item}
+        extraData={textToShow}
       />
 
       <View style={styles.footer}>
@@ -66,7 +85,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    backgroundColor: '#f0ece4',
+    backgroundColor: '#eff1f1',
   },
   searchBar: {
     gap: 15,
@@ -96,7 +115,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#222222'
+    color: '#222222',
   },
   footer: {
     flexDirection: 'row',
