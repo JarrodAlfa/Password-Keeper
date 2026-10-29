@@ -220,6 +220,52 @@ export default function Index() {
         </KeyboardAvoidingView>
       </Modal>
 
+      <Modal
+        visible={CreateModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={handleCloseCreate}
+      >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TouchableOpacity style={styles.backButton} onPress={handleCloseCreate}>
+              <Ionicons name='arrow-back-circle' size={50} color={'#222222'} />
+            </TouchableOpacity>
+            
+            <View style={styles.textView}>
+              <Text style={styles.editText}>enter your e-mail/user:</Text>
+            </View>
+            <View style={styles.inputView}>
+              <TextInput 
+                placeholder="mail/user" 
+                value={newTitle} 
+                onChangeText={setNewTitle} 
+                placeholderTextColor="rgba(172, 172, 172, .30)" 
+                style={styles.editInputs}
+                autoCapitalize="none"
+              />
+            </View>
+            <View style={styles.textView}>
+              <Text style={styles.editText}>enter your password:</Text>
+            </View>
+            <View style={styles.inputView}>
+              <TextInput 
+                placeholder="new password" 
+                value={newPassword}
+                secureTextEntry
+                onChangeText={setNewPassword} 
+                placeholderTextColor="rgba(172, 172, 172, .30)" 
+                style={styles.editInputs}
+                autoCapitalize="none"
+              />
+            </View>
+            <TouchableOpacity style={styles.confirmButton} onPress={handleCreateItem}>
+              <Text style={styles.editText}>Create</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
       <FlatList
         data={filteredData}
         keyExtractor={(item) => item.id}
@@ -228,7 +274,10 @@ export default function Index() {
       />
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.newItemButton}>
+        <TouchableOpacity 
+          style={styles.newItemButton}
+          onPress={handleOpenCreate}  
+        >
           <Text style={styles.newItemButtonText}>Create new password</Text>
         </TouchableOpacity>
         <TouchableOpacity>
