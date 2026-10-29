@@ -1,6 +1,6 @@
 import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { useState } from "react";
-import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -29,34 +29,98 @@ export default function Index() {
   ]);
 
   const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [EditModalVisible, setEditModalVisible] = useState(false);
+  const [CreateModalVisible, setCreateModalVisible] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   const [editTitle, setEditTitle] = useState('');
+  const [oldPass, setOldPass] = useState('');
   const [editPass, setEditPass] = useState('');
+
+  const [searchText, setSearchText] = useState('');
+  const filteredData = data.filter(item =>
+    item.title.toLocaleLowerCase().includes(searchText.trim().toLowerCase())
+  );
+
+  const handleOpenCreate = () => {
+    setNewTitle('');
+    setNewPassword('');
+    setCreateModalVisible(true);
+  };
+
+  const handleCloseCreate = () => {
+    setCreateModalVisible(false);
+    setNewTitle('');
+    setNewPassword('');
+  };
+
+  const handleCreateItem = () => {
+    const title = newTitle.trim();
+
+    if (!title || !newPassword) {
+      alert('Please fill in both fields.');
+      return;
+    }
+
+    const newItem: ItemType = {
+      id: `${Date.now()}-${Math.random()}`,
+      title,
+      password: newPassword
+    };
+
+    setData(prevData => [...prevData, newItem]);
+
+    handleCloseCreate();
+  }
 
   const HandleOpenEditing = (item: ItemType) => {
     setSelectedItem(item);
-    setModalVisible(true);
+    setEditModalVisible(true);
 
     setEditTitle(item.title);
-    setEditPass(item.password);
+    setOldPass('');
+    setEditPass('');
   };
 
   const HandleCloseEditing = () => {
     setSelectedItem(null)
-    setModalVisible(false)
+    setEditModalVisible(false)
+    setOldPass('')
+    setEditPass('')
   }
+
+  const CheckSaveable = () => {
+    if (!selectedItem) return;
+
+    if (!editTitle.trim() || !oldPass || !editPass) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    if (oldPass !== selectedItem.password) {
+      alert('Your old password is incorrect.');
+      return;
+    }
+    
+    HandleSaveEdit();
+  };
 
   const HandleSaveEdit = () => {
     if (!selectedItem) return;
 
     setData(prevData =>
       prevData.map(item =>
-        item.id === selectedItem.id ? { ...item, title: editTitle, password: editPass} : item
+        item.id === selectedItem.id ? { 
+          ...item, 
+          title: editTitle, 
+          password: editPass} 
+        : item
       )
-    )
+    );
+
     HandleCloseEditing();
-  }
+  };
 
   const [textToShow, setTextToShow] = useState<string | null>(null);
 
@@ -90,15 +154,22 @@ export default function Index() {
     <SafeAreaView style={styles.container}>
       <View style={styles.searchBar}>
         <Ionicons name='search' size={24} color={'#222222'} />
-        <TextInput placeholder='search' placeholderTextColor="rgba(172, 172, 172, .30)" style={styles.searchBarInput} clearButtonMode='always'/>
+        <TextInput 
+          placeholder='search'
+          value={searchText}
+          onChangeText={setSearchText}
+          placeholderTextColor="rgba(172, 172, 172, .30)" 
+          style={styles.searchBarInput} 
+          clearButtonMode='always'
+        />
       </View>
       
       <Modal
-        visible={modalVisible}
+        visible={EditModalVisible}
         transparent={true}
         animationType="slide"
       >
-        <View style={styles.centeredView}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.centeredView}>
           <View style={styles.modalView}>
             <TouchableOpacity style={styles.backButton} onPress={HandleCloseEditing}>
               <Ionicons name='arrow-back-circle' size={50} color={'#222222'} />
@@ -108,29 +179,49 @@ export default function Index() {
               <Text style={styles.editText}>change your e-mail/user:</Text>
             </View>
             <View style={styles.inputView}>
-              <TextInput placeholder="mail/user" value={editTitle} onChangeText={setEditTitle} placeholderTextColor="rgba(172, 172, 172, .30)" style={styles.editInputs}/>
+              <TextInput 
+                placeholder="mail/user" 
+                value={editTitle} 
+                onChangeText={setEditTitle} 
+                placeholderTextColor="rgba(172, 172, 172, .30)" 
+                style={styles.editInputs}
+              />
             </View>
             <View style={styles.textView}>
               <Text style={styles.editText}>enter your old password:</Text>
             </View>
             <View style={styles.inputView}>
-              <TextInput placeholder="old password" placeholderTextColor="rgba(172, 172, 172, .30)" style={styles.editInputs}/>
+              <TextInput 
+                placeholder="old password"
+                value={oldPass}
+                onChangeText={setOldPass}
+                secureTextEntry 
+                placeholderTextColor="rgba(172, 172, 172, .30)" 
+                style={styles.editInputs}
+              />
             </View>
             <View style={styles.textView}>
               <Text style={styles.editText}>enter your new password:</Text>
             </View>
             <View style={styles.inputView}>
-              <TextInput placeholder="new password" onChangeText={setEditPass} placeholderTextColor="rgba(172, 172, 172, .30)" style={styles.editInputs}/>
+              <TextInput 
+                placeholder="new password" 
+                value={editPass}
+                secureTextEntry
+                onChangeText={setEditPass} 
+                placeholderTextColor="rgba(172, 172, 172, .30)" 
+                style={styles.editInputs}
+              />
             </View>
-            <TouchableOpacity style={styles.confirmButton} onPress={HandleSaveEdit}>
+            <TouchableOpacity style={styles.confirmButton} onPress={CheckSaveable}>
               <Text style={styles.editText}>Save</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <FlatList
-        data={data}
+        data={filteredData}
         keyExtractor={(item) => item.id}
         renderItem={Item}
         extraData={textToShow}
