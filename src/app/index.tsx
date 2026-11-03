@@ -1,6 +1,6 @@
 import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { useState } from "react";
-import { FlatList, KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, KeyboardAvoidingView, Modal, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -31,8 +31,13 @@ export default function Index() {
   const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
   const [EditModalVisible, setEditModalVisible] = useState(false);
   const [CreateModalVisible, setCreateModalVisible] = useState(false);
+  const [SettingsModalVisible, setSettingsModalVisible] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+  const toggleDarkMode = () => setDarkMode(previousState => !previousState);
+  const [notifications, setNotifications] = useState(false);
+  const toggleNotifications = () => setNotifications(previousState => !previousState);
 
   const [editTitle, setEditTitle] = useState('');
   const [oldPass, setOldPass] = useState('');
@@ -42,6 +47,39 @@ export default function Index() {
   const filteredData = data.filter(item =>
     item.title.toLocaleLowerCase().includes(searchText.trim().toLowerCase())
   );
+
+  const handleDeleteItem = (id: string) => {
+    Alert.alert(
+      'Delete password',
+      'Are you sure you want to delete this item?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            setData(PrevData =>
+              PrevData.filter(item => item.id !== id)
+            );
+
+            setTextToShow(prev => prev === id ? null : prev);
+          }
+        }
+      ],
+      {cancelable: true}
+    );
+  };
+
+  const handleOpenSettings = () => {
+    setSettingsModalVisible(true);
+  }
+
+  const handleCloseSettings = () => {
+    setSettingsModalVisible(false);
+  }
 
   const handleOpenCreate = () => {
     setNewTitle('');
@@ -142,7 +180,11 @@ export default function Index() {
 
         <Text style={styles.itemText}>{isShown ? item.password : item.title}</Text>
         
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleDeleteItem(item.id)}
+          accessibilityRole="button"
+          accessibilityLabel={`Delete ${item.title}`}
+        >
           <Ionicons name='trash' size={24} color={'#222222'} />
         </TouchableOpacity>
       </View>
@@ -185,6 +227,8 @@ export default function Index() {
                 onChangeText={setEditTitle} 
                 placeholderTextColor="rgba(172, 172, 172, .30)" 
                 style={styles.editInputs}
+                clearButtonMode='always'
+                autoCapitalize="none"
               />
             </View>
             <View style={styles.textView}>
@@ -198,6 +242,8 @@ export default function Index() {
                 secureTextEntry 
                 placeholderTextColor="rgba(172, 172, 172, .30)" 
                 style={styles.editInputs}
+                clearButtonMode='always'
+                autoCapitalize="none"
               />
             </View>
             <View style={styles.textView}>
@@ -211,6 +257,8 @@ export default function Index() {
                 onChangeText={setEditPass} 
                 placeholderTextColor="rgba(172, 172, 172, .30)" 
                 style={styles.editInputs}
+                clearButtonMode='always'
+                autoCapitalize="none"
               />
             </View>
             <TouchableOpacity style={styles.confirmButton} onPress={CheckSaveable}>
@@ -243,6 +291,7 @@ export default function Index() {
                 placeholderTextColor="rgba(172, 172, 172, .30)" 
                 style={styles.editInputs}
                 autoCapitalize="none"
+                clearButtonMode='always'
               />
             </View>
             <View style={styles.textView}>
@@ -257,11 +306,49 @@ export default function Index() {
                 placeholderTextColor="rgba(172, 172, 172, .30)" 
                 style={styles.editInputs}
                 autoCapitalize="none"
+                clearButtonMode='always'
               />
             </View>
             <TouchableOpacity style={styles.confirmButton} onPress={handleCreateItem}>
               <Text style={styles.editText}>Create</Text>
             </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      <Modal
+        visible={SettingsModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={handleCloseSettings}
+      >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TouchableOpacity style={styles.backButton} onPress={handleCloseSettings}>
+              <Ionicons name='arrow-back-circle' size={50} color={'#222222'} />
+            </TouchableOpacity>
+
+            <View style={styles.option}>
+              <Text style={styles.itemText}>Dark mode</Text>
+              <Switch
+                style={styles.switch}
+                trackColor={{ false: "#767577", true: "#C2D8C4" }}
+                ios_backgroundColor="#3e3e3e"
+                value={darkMode}
+                onValueChange={toggleDarkMode}
+              />
+            </View>
+
+            <View style={styles.option}>
+              <Text style={styles.itemText}>Notifications</Text>
+              <Switch
+                style={styles.switch}
+                trackColor={{ false: "#767577", true: "#C2D8C4" }}
+                ios_backgroundColor="#3e3e3e"
+                value={notifications}
+                onValueChange={toggleNotifications}
+              />
+            </View>
           </View>
         </KeyboardAvoidingView>
       </Modal>
@@ -280,7 +367,9 @@ export default function Index() {
         >
           <Text style={styles.newItemButtonText}>Create new password</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleOpenSettings}
+        >
           <Ionicons name='cog' size={50} color={'#222222'} />
         </TouchableOpacity>
       </View>
@@ -394,4 +483,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 70,
     alignItems: 'center',
   },
+  option: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  switch: {
+    marginLeft: 10,
+  }
 });
