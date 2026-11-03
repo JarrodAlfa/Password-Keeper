@@ -170,17 +170,25 @@ export default function Index() {
     const isShown = textToShow === item.id;
 
     return (
-    <TouchableOpacity onPress={
-      () => toggleTTS(item.id)
-    }>
       <View style={styles.item}>
-        <TouchableOpacity onPress={() => HandleOpenEditing(item)}>
+        <TouchableOpacity 
+          onPress={() => HandleOpenEditing(item)}
+          style={styles.sideButton}  
+        >
           <Ionicons name='create' size={24} color={'#222222'} />
         </TouchableOpacity>
 
-        <Text style={styles.itemText}>{isShown ? item.password : item.title}</Text>
-        
+        <TouchableOpacity 
+          style={styles.mainButton}
+          onPress={() => toggleTTS(item.id)}
+        >
+          <Text style={styles.itemText}>
+            {isShown ? item.password : item.title}
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
+          style={styles.sideButton}
           onPress={() => handleDeleteItem(item.id)}
           accessibilityRole="button"
           accessibilityLabel={`Delete ${item.title}`}
@@ -188,8 +196,7 @@ export default function Index() {
           <Ionicons name='trash' size={24} color={'#222222'} />
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
-    );
+    )
   };
 
   return (
@@ -405,13 +412,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#C2D8C4',
     borderRadius: 20,
-    padding: 16,
     marginBottom: 10,
   },
   itemText: {
     fontWeight: 'bold',
     fontSize: 16,
     color: '#222222',
+  },
+  mainButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    padding: 16,
+    flex: 1,
+  },
+  sideButton: {
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   footer: {
     flexDirection: 'row',
