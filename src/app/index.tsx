@@ -3,13 +3,15 @@ import { useState } from "react";
 import { Alert, FlatList, KeyboardAvoidingView, Modal, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Index() {
-  type ItemType = {
-    id: string;
-    title: string;
-    password: string;
-  };
+import Item from "../components/Item";
 
+type ItemType = {
+  id: string;
+  title: string;
+  password: string;
+};
+
+export default function Index() {
   const [data, setData] = useState<ItemType[]>([
     {
       id: '1',
@@ -29,11 +31,14 @@ export default function Index() {
   ]);
 
   const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
+  
   const [EditModalVisible, setEditModalVisible] = useState(false);
   const [CreateModalVisible, setCreateModalVisible] = useState(false);
   const [SettingsModalVisible, setSettingsModalVisible] = useState(false);
+  
   const [newTitle, setNewTitle] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  
   const [darkMode, setDarkMode] = useState(false);
   const toggleDarkMode = () => setDarkMode(previousState => !previousState);
   const [notifications, setNotifications] = useState(false);
@@ -47,6 +52,11 @@ export default function Index() {
   const filteredData = data.filter(item =>
     item.title.toLocaleLowerCase().includes(searchText.trim().toLowerCase())
   );
+
+  const [textToShow, setTextToShow] = useState<string | null>(null);
+  const toggleTTS = (id: string) => {
+    setTextToShow(prevTTS => (prevTTS === id ? null : id));
+  };
 
   const handleDeleteItem = (id: string) => {
     Alert.alert(
@@ -158,45 +168,6 @@ export default function Index() {
     );
 
     HandleCloseEditing();
-  };
-
-  const [textToShow, setTextToShow] = useState<string | null>(null);
-
-  const toggleTTS = (id: string) => {
-    setTextToShow(prevTTS => (prevTTS === id ? null : id));
-  };
-
-  const Item = ({ item }: { item: ItemType }) => {
-    const isShown = textToShow === item.id;
-
-    return (
-      <View style={styles.item}>
-        <TouchableOpacity 
-          onPress={() => HandleOpenEditing(item)}
-          style={styles.sideButton}  
-        >
-          <Ionicons name='create' size={24} color={'#222222'} />
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.mainButton}
-          onPress={() => toggleTTS(item.id)}
-        >
-          <Text style={styles.itemText}>
-            {isShown ? item.password : item.title}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.sideButton}
-          onPress={() => handleDeleteItem(item.id)}
-          accessibilityRole="button"
-          accessibilityLabel={`Delete ${item.title}`}
-        >
-          <Ionicons name='trash' size={24} color={'#222222'} />
-        </TouchableOpacity>
-      </View>
-    )
   };
 
   return (
@@ -363,8 +334,16 @@ export default function Index() {
       <FlatList
         data={filteredData}
         keyExtractor={(item) => item.id}
-        renderItem={Item}
         extraData={textToShow}
+        renderItem={({ item }) => (
+          <Item 
+            item={item}
+            isShown={textToShow === item.id}
+            onToggle={toggleTTS}
+            onEdit={HandleOpenEditing}
+            onDelete={handleDeleteItem}
+          />
+        )}
       />
 
       <View style={styles.footer}>
@@ -406,30 +385,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#222222'
   },
-  item: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    backgroundColor: '#C2D8C4',
-    borderRadius: 20,
-    marginBottom: 10,
-  },
   itemText: {
-    fontWeight: 'bold',
+    fontWeight: 'bold',        
     fontSize: 16,
     color: '#222222',
-  },
-  mainButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    padding: 16,
-    flex: 1,
-  },
-  sideButton: {
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   footer: {
     flexDirection: 'row',
