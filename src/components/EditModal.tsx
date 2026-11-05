@@ -119,7 +119,8 @@ const styles = StyleSheet.create({
     editInputs: {
         flex: 1,
         fontSize: 16,
-        color: '#222222'
+        color: '#222222',
+        backgroundColor: 'transparent',
     },
     confirmButton: {
         backgroundColor: '#C2D8C4',

@@ -16,6 +16,7 @@ export default function SearchBar({ SearchText, SetSearchText }: SearchBarProps)
                 placeholderTextColor="#222222"
                 value={SearchText}
                 onChangeText={SetSearchText}
+                clearButtonMode='always'
             />
         </View>
     );
@@ -36,6 +37,7 @@ const styles = StyleSheet.create({
     searchBarInput: {
         flex: 1,
         fontSize: 16,
-        color: '#222222'
+        color: '#222222',
+        backgroundColor: 'transparent',
     },
 })
