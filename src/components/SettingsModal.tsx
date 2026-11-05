@@ -5,12 +5,12 @@ type SettingsModalProps = {
     DarkMode: boolean;
     SetDarkMode: (value: boolean) => void;
     Notifications: boolean;
-    SetNotifications: (value: boolean) => void;
+    ToggleNotifications: (value: boolean) => void;
     SettingsModalVisible: boolean;
     HandleCloseSettings: () => void;
 };
 
-export default function SettingsModal({ DarkMode, SetDarkMode, Notifications, SetNotifications, SettingsModalVisible, HandleCloseSettings }: SettingsModalProps) {
+export default function SettingsModal({ DarkMode, SetDarkMode, Notifications, ToggleNotifications, SettingsModalVisible, HandleCloseSettings }: SettingsModalProps) {
     return (
         <Modal
         visible={SettingsModalVisible}
@@ -42,7 +42,7 @@ export default function SettingsModal({ DarkMode, SetDarkMode, Notifications, Se
                 trackColor={{ false: "#767577", true: "#C2D8C4" }}
                 ios_backgroundColor="#3e3e3e"
                 value={Notifications}
-                onValueChange={SetNotifications}
+                onValueChange={ToggleNotifications}
               />
             </View>
           </View>

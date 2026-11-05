@@ -46,7 +46,14 @@ export default function Index() {
   const [darkMode, setDarkMode] = useState(false);
   const toggleDarkMode = () => setDarkMode(previousState => !previousState);
   const [notifications, setNotifications] = useState(false);
-  const toggleNotifications = () => setNotifications(previousState => !previousState);
+  const toggleNotifications = (value: boolean) => {
+    setNotifications(value);
+
+    if (value === true) {
+      handleNotificationAlert();
+    }
+  }
+
 
   const [editTitle, setEditTitle] = useState('');
   const [oldPass, setOldPass] = useState('');
@@ -61,6 +68,27 @@ export default function Index() {
   const toggleTTS = (id: string) => {
     setTextToShow(prevTTS => (prevTTS === id ? null : id));
   };
+
+  const handleNotificationAlert = () => {  
+    Alert.alert(
+      'Notifications',
+      'Do you want to enable notifications?',
+      [
+        {
+          text: 'OK',
+          style: 'default',
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          onPress: () => {
+            setNotifications(false);
+          }
+        }
+      ],
+      {cancelable: true}
+    );
+ }
 
   const handleDeleteItem = (id: string) => {
     Alert.alert(
@@ -203,7 +231,7 @@ export default function Index() {
         DarkMode={darkMode}
         SetDarkMode={toggleDarkMode}
         Notifications={notifications}
-        SetNotifications={toggleNotifications}
+        ToggleNotifications={toggleNotifications}
         SettingsModalVisible={SettingsModalVisible}
         HandleCloseSettings={handleCloseSettings}
       />
