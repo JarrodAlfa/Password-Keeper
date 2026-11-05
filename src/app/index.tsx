@@ -4,6 +4,7 @@ import { Alert, FlatList, KeyboardAvoidingView, Modal, Platform, StyleSheet, Swi
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Item from "../components/Item";
+import SearchBar from "../components/SearchBar";
 
 type ItemType = {
   id: string;
@@ -172,17 +173,7 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.searchBar}>
-        <Ionicons name='search' size={24} color={'#222222'} />
-        <TextInput 
-          placeholder='search'
-          value={searchText}
-          onChangeText={setSearchText}
-          placeholderTextColor="rgba(172, 172, 172, .30)" 
-          style={styles.searchBarInput} 
-          clearButtonMode='always'
-        />
-      </View>
+      <SearchBar SearchText={searchText} SetSearchText={setSearchText} />
       
       <Modal
         visible={EditModalVisible}
@@ -368,22 +359,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: '#eff1f1',
-  },
-  searchBar: {
-    gap: 15,
-    marginTop: 10,
-    marginBottom: 10,
-    flexDirection: 'row',
-    padding: 16,
-    borderRadius: 20,
-    borderWidth: 3,
-    backgroundColor: '#FFF',
-    borderColor: 'rgba(172, 172, 172, .30)',
-  },
-  searchBarInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#222222'
   },
   itemText: {
     fontWeight: 'bold',        
