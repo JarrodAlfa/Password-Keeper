@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Alert, FlatList, KeyboardAvoidingView, Modal, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import Footer from "../components/Footer";
 import Item from "../components/Item";
 import SearchBar from "../components/SearchBar";
 
@@ -337,19 +338,10 @@ export default function Index() {
         )}
       />
 
-      <View style={styles.footer}>
-        <TouchableOpacity 
-          style={styles.newItemButton}
-          onPress={handleOpenCreate}  
-        >
-          <Text style={styles.newItemButtonText}>Create new password</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleOpenSettings}
-        >
-          <Ionicons name='cog' size={50} color={'#222222'} />
-        </TouchableOpacity>
-      </View>
+      <Footer 
+        openCreateModal={handleOpenCreate}
+        openEditModal={handleOpenSettings}
+      />
     </SafeAreaView>
   );
 }
@@ -364,26 +356,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',        
     fontSize: 16,
     color: '#222222',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginRight: 15,
-    marginLeft: 20,
-  },
-  newItemButton: {
-    flex: 1,
-    backgroundColor: '#C2D8C4',
-    padding: 20,
-    borderRadius: 20,
-    marginRight: 20,
-    alignItems: 'center',
-  },
-  newItemButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#222222'
   },
   centeredView: {
     flex: 1,
