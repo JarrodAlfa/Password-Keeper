@@ -7,6 +7,9 @@ export const lightColors = {
   icon: "#46513B",
   border: "#B6B49F",
   placeholder: "rgb(40, 53, 42, 0.3)",
+  switchTrackOff: "#B6B49F",
+  switchTrackOn: "#718568",
+  switchThumb: "#EAE5D8",
 };
 
 export const darkColors = {
@@ -17,4 +20,7 @@ export const darkColors = {
   icon: "#C5B99F",
   border: "#4A4B3B",
   placeholder: "rgb(233, 226, 210, 0.3)",
+  switchTrackOff: "#514D3F",
+  switchTrackOn: "#91A681",
+  switchThumb: "#E9E2D2",
 };

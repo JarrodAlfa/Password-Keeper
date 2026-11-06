@@ -30,8 +30,9 @@ export default function SettingsModal({ Colors, DarkMode, SetDarkMode, Notificat
               <Text style={[styles.itemText, { color: Colors.text }]}>Dark mode</Text>
               <Switch
                 style={styles.switch}
-                trackColor={{ false: "#767577", true: "#C2D8C4" }}
+                trackColor={{ false: Colors.switchTrackOff, true: Colors.switchTrackOn }}
                 ios_backgroundColor="#3e3e3e"
+                thumbColor={Colors.switchThumb}
                 value={DarkMode}
                 onValueChange={SetDarkMode}
               />
@@ -41,8 +42,9 @@ export default function SettingsModal({ Colors, DarkMode, SetDarkMode, Notificat
               <Text style={[styles.itemText, { color: Colors.text }]}>Notifications</Text>
               <Switch
                 style={styles.switch}
-                trackColor={{ false: "#767577", true: "#C2D8C4" }}
+                trackColor={{ false: Colors.switchTrackOff, true: Colors.switchTrackOn }}
                 ios_backgroundColor="#3e3e3e"
+                thumbColor={Colors.switchThumb}
                 value={Notifications}
                 onValueChange={ToggleNotifications}
               />
