@@ -1,7 +1,9 @@
 import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { darkColors, lightColors } from "../constants/colors";
 
 type EditModalProps = {
+    Colors: typeof darkColors | typeof lightColors;
     EditTitle: string;
     SetEditTitle: (text: string) => void;
     OldPassword: string;
@@ -13,7 +15,7 @@ type EditModalProps = {
     CheckSaveable: () => void;
 };
 
-export default function EditModal({ EditTitle, OldPassword, EditPassword, EditModaleVisible, HandleCloseEditing, SetEditTitle, SetOldPassword, SetEditPassword, CheckSaveable }: EditModalProps) {
+export default function EditModal({ Colors, EditTitle, OldPassword, EditPassword, EditModaleVisible, HandleCloseEditing, SetEditTitle, SetOldPassword, SetEditPassword, CheckSaveable }: EditModalProps) {
     return (
         <Modal
         visible={EditModaleVisible}
@@ -21,57 +23,57 @@ export default function EditModal({ EditTitle, OldPassword, EditPassword, EditMo
         animationType="slide"
       >
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={[styles.modalView, { backgroundColor: Colors.background, }, { borderColor: Colors.border }]}>
             <TouchableOpacity style={styles.backButton} onPress={HandleCloseEditing}>
-              <Ionicons name='arrow-back-circle' size={50} color={'#222222'} />
+              <Ionicons name='arrow-back-circle' size={50} color={Colors.icon} />
             </TouchableOpacity>
             
             <View style={styles.textView}>
-              <Text style={styles.editText}>change your e-mail/user:</Text>
+              <Text style={[styles.editText, { color: Colors.text }]}>change your e-mail/user:</Text>
             </View>
-            <View style={styles.inputView}>
+            <View style={[styles.inputView, { backgroundColor: Colors.modalBackground, borderColor: Colors.border }]}>
               <TextInput 
-                placeholder="mail/user" 
+                placeholder="mail/user..." 
                 value={EditTitle} 
                 onChangeText={SetEditTitle} 
-                placeholderTextColor="rgba(172, 172, 172, .30)" 
-                style={styles.editInputs}
+                placeholderTextColor={Colors.placeholder}
+                style={[styles.editInputs, { color: Colors.text }]}
                 clearButtonMode='always'
                 autoCapitalize="none"
               />
             </View>
             <View style={styles.textView}>
-              <Text style={styles.editText}>enter your old password:</Text>
+              <Text style={[styles.editText, { color: Colors.text }]}>enter your old password:</Text>
             </View>
-            <View style={styles.inputView}>
+            <View style={[styles.inputView, { backgroundColor: Colors.modalBackground, borderColor: Colors.border }]}>
               <TextInput 
-                placeholder="old password"
+                placeholder="old password..."
                 value={OldPassword}
                 onChangeText={SetOldPassword}
                 secureTextEntry 
-                placeholderTextColor="rgba(172, 172, 172, .30)" 
-                style={styles.editInputs}
+                placeholderTextColor={Colors.placeholder}
+                style={[styles.editInputs, { color: Colors.text }]}
                 clearButtonMode='always'
                 autoCapitalize="none"
               />
             </View>
             <View style={styles.textView}>
-              <Text style={styles.editText}>enter your new password:</Text>
+              <Text style={[styles.editText, { color: Colors.text }]}>enter your new password:</Text>
             </View>
-            <View style={styles.inputView}>
+            <View style={[styles.inputView, { backgroundColor: Colors.modalBackground, borderColor: Colors.border }]}>
               <TextInput 
-                placeholder="new password" 
+                placeholder="new password..." 
                 value={EditPassword}
                 secureTextEntry
                 onChangeText={SetEditPassword} 
-                placeholderTextColor="rgba(172, 172, 172, .30)" 
-                style={styles.editInputs}
+                placeholderTextColor={Colors.placeholder}
+                style={[styles.editInputs, { color: Colors.text }]}
                 clearButtonMode='always'
                 autoCapitalize="none"
               />
             </View>
-            <TouchableOpacity style={styles.confirmButton} onPress={CheckSaveable}>
-              <Text style={styles.editText}>Save</Text>
+            <TouchableOpacity style={[styles.confirmButton, { backgroundColor: Colors.item }]} onPress={CheckSaveable}>
+              <Text style={[styles.editText, { color: Colors.text }]}>Save</Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -103,7 +105,6 @@ const styles = StyleSheet.create({
     editText: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#222222'
     },
     inputView: {
         marginTop: 10,

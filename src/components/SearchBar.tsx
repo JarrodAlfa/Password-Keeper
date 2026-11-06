@@ -1,19 +1,21 @@
 import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { StyleSheet, TextInput, View } from "react-native";
+import { darkColors, lightColors } from "../constants/colors";
 
 type SearchBarProps = {
   SearchText: string;
   SetSearchText: (text: string) => void;
+  Colors: typeof lightColors | typeof darkColors;
 };
 
-export default function SearchBar({ SearchText, SetSearchText }: SearchBarProps) {
+export default function SearchBar({ SearchText, SetSearchText, Colors }: SearchBarProps) {
     return (
-        <View style={styles.searchBar}>
-            <Ionicons name='search' size={24} color={'#222222'} />
+        <View style={[styles.searchBar, { backgroundColor: Colors.modalBackground }, { borderColor: Colors.border }]}>
+            <Ionicons name='search' size={24} color={Colors.icon} />
             <TextInput
                 style={styles.searchBarInput}
                 placeholder="Search..."
-                placeholderTextColor="#222222"
+                placeholderTextColor={Colors.placeholder}
                 value={SearchText}
                 onChangeText={SetSearchText}
                 clearButtonMode='always'

@@ -1,24 +1,26 @@
 import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { darkColors, lightColors } from "../constants/colors";
 
 type FooterProps = {
+  Colors: typeof darkColors | typeof lightColors;
   openCreateModal: () => void;
   openEditModal: () => void;
 };
 
-export default function Footer({ openCreateModal, openEditModal }: FooterProps) {
+export default function Footer({ Colors, openCreateModal, openEditModal }: FooterProps) {
     return (
         <View style={styles.footer}>
             <TouchableOpacity 
-              style={styles.newItemButton}
+              style={[styles.newItemButton, { backgroundColor: Colors.item }]}
               onPress={openCreateModal}  
             >
-                <Text style={styles.newItemButtonText}>Create new password</Text>
+                <Text style={[styles.newItemButtonText, { color: Colors.text }]}>Create new password</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={openEditModal}
                 >
-                <Ionicons name='cog' size={50} color={'#222222'} />
+                <Ionicons name='cog' size={50} color={Colors.icon} />
             </TouchableOpacity>
         </View>
     )

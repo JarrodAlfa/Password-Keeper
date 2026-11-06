@@ -1,7 +1,10 @@
 import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { darkColors, lightColors } from "../constants/colors";
+
 
 type CreateModalProps = {
+    Colors: typeof darkColors | typeof lightColors;
     NewTitle: string;
     SetNewTitle: (text: string) => void;
     NewPassword: string;
@@ -11,7 +14,7 @@ type CreateModalProps = {
     CheckCreateable: () => void;
 }
 
-export default function CreateModal({ NewTitle, NewPassword, CreateModaleVisible, HandleCloseCreating, SetNewTitle, SetNewPassword, CheckCreateable }: CreateModalProps) {
+export default function CreateModal({ Colors, NewTitle, NewPassword, CreateModaleVisible, HandleCloseCreating, SetNewTitle, SetNewPassword, CheckCreateable }: CreateModalProps) {
     return (
         <Modal
                 visible={CreateModaleVisible}
@@ -20,42 +23,42 @@ export default function CreateModal({ NewTitle, NewPassword, CreateModaleVisible
                 onRequestClose={HandleCloseCreating}
               >
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.centeredView}>
-                  <View style={styles.modalView}>
+                  <View style={[styles.modalView, { backgroundColor: Colors.background }, { borderColor: Colors.border }]}>
                     <TouchableOpacity style={styles.backButton} onPress={HandleCloseCreating}>
-                      <Ionicons name='arrow-back-circle' size={50} color={'#222222'} />
+                      <Ionicons name='arrow-back-circle' size={50} color={Colors.icon} />
                     </TouchableOpacity>
                     
                     <View style={styles.textView}>
-                      <Text style={styles.editText}>enter your e-mail/user:</Text>
+                      <Text style={[styles.editText, { color: Colors.text }]}>enter your e-mail/user:</Text>
                     </View>
-                    <View style={styles.inputView}>
+                    <View style={[styles.inputView, { backgroundColor: Colors.modalBackground, borderColor: Colors.border }]}>
                       <TextInput 
-                        placeholder="mail/user" 
+                        placeholder="mail/user..." 
                         value={NewTitle} 
                         onChangeText={SetNewTitle} 
-                        placeholderTextColor="rgba(172, 172, 172, .30)" 
-                        style={styles.editInputs}
+                        placeholderTextColor={Colors.placeholder}
+                        style={[styles.editInputs, { color: Colors.text }]}
                         autoCapitalize="none"
                         clearButtonMode='always'
                       />
                     </View>
                     <View style={styles.textView}>
-                      <Text style={styles.editText}>enter your password:</Text>
+                      <Text style={[styles.editText, { color: Colors.text }]}>enter your password:</Text>
                     </View>
-                    <View style={styles.inputView}>
+                    <View style={[styles.inputView, { backgroundColor: Colors.modalBackground, borderColor: Colors.border }]}>
                       <TextInput 
-                        placeholder="new password" 
+                        placeholder="new password..." 
                         value={NewPassword}
                         secureTextEntry
                         onChangeText={SetNewPassword} 
-                        placeholderTextColor="rgba(172, 172, 172, .30)" 
-                        style={styles.editInputs}
+                        placeholderTextColor={Colors.placeholder}
+                        style={[styles.editInputs, { color: Colors.text }]}
                         autoCapitalize="none"
                         clearButtonMode='always'
                       />
                     </View>
-                    <TouchableOpacity style={styles.confirmButton} onPress={CheckCreateable}>
-                      <Text style={styles.editText}>Create</Text>
+                    <TouchableOpacity style={[styles.confirmButton, { backgroundColor: Colors.item }]} onPress={CheckCreateable}>
+                      <Text style={[styles.editText, { color: Colors.text }]}>Create</Text>
                     </TouchableOpacity>
                   </View>
                 </KeyboardAvoidingView>

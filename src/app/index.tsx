@@ -8,6 +8,7 @@ import Footer from "../components/Footer";
 import Item from "../components/Item";
 import SearchBar from "../components/SearchBar";
 import SettingsModal from "../components/SettingsModal";
+import { darkColors, lightColors } from "../constants/colors";
 
 type ItemType = {
   id: string;
@@ -45,6 +46,8 @@ export default function Index() {
   
   const [darkMode, setDarkMode] = useState(false);
   const toggleDarkMode = () => setDarkMode(previousState => !previousState);
+  const colors = darkMode ? darkColors : lightColors;
+
   const [notifications, setNotifications] = useState(false);
   const toggleNotifications = (value: boolean) => {
     setNotifications(value);
@@ -203,8 +206,12 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <SearchBar SearchText={searchText} SetSearchText={setSearchText} />
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <SearchBar 
+        SearchText={searchText} 
+        SetSearchText={setSearchText} 
+        Colors={colors}
+      />
       <EditModal
         EditTitle={editTitle}
         OldPassword={oldPass}
@@ -215,6 +222,7 @@ export default function Index() {
         SetOldPassword={setOldPass}
         SetEditPassword={setEditPass}
         CheckSaveable={CheckSaveable}
+        Colors={colors}
       />
 
       <CreateModal
@@ -225,6 +233,7 @@ export default function Index() {
         SetNewTitle={setNewTitle}
         SetNewPassword={setNewPassword}
         CheckCreateable={handleCreateItem}
+        Colors={colors}
       />
 
       <SettingsModal
@@ -234,6 +243,7 @@ export default function Index() {
         ToggleNotifications={toggleNotifications}
         SettingsModalVisible={SettingsModalVisible}
         HandleCloseSettings={handleCloseSettings}
+        Colors={colors}
       />
 
       <FlatList
@@ -247,6 +257,7 @@ export default function Index() {
             onToggle={toggleTTS}
             onEdit={HandleOpenEditing}
             onDelete={handleDeleteItem}
+            Colors={colors}
           />
         )}
       />
@@ -254,6 +265,7 @@ export default function Index() {
       <Footer 
         openCreateModal={handleOpenCreate}
         openEditModal={handleOpenSettings}
+        Colors={colors}
       />
     </SafeAreaView>
   );

@@ -1,5 +1,6 @@
 import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { darkColors, lightColors } from "../constants/colors";
 
 type ItemType = {
   id: string;
@@ -13,9 +14,11 @@ type ItemProps = {
   onToggle: (id: string) => void;
   onEdit: (item: ItemType) => void;
   onDelete: (id: string) => void;
+  Colors: typeof darkColors | typeof lightColors;
 }
 
 export default function Item({ 
+    Colors,
     item, 
     isShown, 
     onToggle, 
@@ -23,19 +26,19 @@ export default function Item({
     onDelete 
 }: ItemProps) {
     return (
-      <View style={styles.item}>
+      <View style={[styles.item, { backgroundColor: Colors.item }]}>
         <TouchableOpacity 
           onPress={() => onEdit(item)}
           style={styles.sideButton}  
         >
-          <Ionicons name='create' size={24} color={'#222222'} />
+          <Ionicons name='create' size={24} color={Colors.icon} />
         </TouchableOpacity>
 
         <TouchableOpacity 
           style={styles.mainButton}
           onPress={() => onToggle(item.id)}
         >
-          <Text style={styles.itemText}>
+          <Text style={[styles.itemText, { color: Colors.text }]}>
             {isShown ? item.password : item.title}
           </Text>
         </TouchableOpacity>
@@ -46,7 +49,7 @@ export default function Item({
           accessibilityRole="button"
           accessibilityLabel={`Delete ${item.title}`}
         >
-          <Ionicons name='trash' size={24} color={'#222222'} />
+          <Ionicons name='trash' size={24} color={Colors.icon} />
         </TouchableOpacity>
       </View>
     )
